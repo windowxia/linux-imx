@@ -50,6 +50,9 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_uart2>;
 	status = "okay";
+	bluetooth {
+		status = "disabled";
+	};
 };
 
 &uart3 {
