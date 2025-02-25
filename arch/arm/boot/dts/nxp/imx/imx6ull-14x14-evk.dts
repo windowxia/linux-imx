@@ -44,7 +44,7 @@
 	status = "okay";
 };
 
-/delete-node/ &uart2;
+// /delete-node/ &uart2;
 
 &uart2 {
 	pinctrl-names = "default";
