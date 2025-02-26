@@ -87,6 +87,19 @@
 		gpios = <&gpio_spi 3 GPIO_ACTIVE_LOW>;
 	};
 
+	leds {
+		compatible = "gpio-leds";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_leds>;
+
+		led0: cpu {
+			label = "cpu";
+			gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
+			default-state = "on";
+			linux,default-trigger = "heartbeat";
+		};
+	};
+
 	sound-wm8960 {
 		compatible = "fsl,imx-audio-wm8960";
 		model = "wm8960-audio";
@@ -107,13 +120,14 @@
 			"RINPUT2", "AMIC",
 			"Mic Jack", "MICB",
 			"AMIC", "MICB";
+		status = "disabled";
 	};
 
 	spi-4 {
 		compatible = "spi-gpio";
 		pinctrl-names = "default";
 		pinctrl-0 = <&pinctrl_spi4>;
-		status = "okay";
+		status = "disabled";
 		sck-gpios = <&gpio5 11 0>;
 		mosi-gpios = <&gpio5 10 0>;
 		cs-gpios = <&gpio5 7 GPIO_ACTIVE_LOW>;
@@ -154,7 +168,7 @@
 	clock-frequency = <100000>;
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_i2c2>;
-	status = "okay";
+	status = "disabled";
 
 	codec: wm8960@1a {
 		#sound-dai-cells = <0>;
@@ -216,6 +230,8 @@
 		output-high;
 		line-name = "eth1-phy";
 	};
+
+	status = "disabled";
 };
 
 &i2c1 {
@@ -311,7 +327,7 @@
 	assigned-clock-parents = <&clks IMX6UL_CLK_PLL4_AUDIO_DIV>;
 	assigned-clock-rates = <0>, <12288000>;
 	fsl,sai-mclk-direction-output;
-	status = "okay";
+	status = "disabled";
 };
 
 &snvs_poweroff {
@@ -335,7 +351,7 @@
 	pinctrl-assert-gpios = <&gpio4 23 GPIO_ACTIVE_HIGH>;
 	port = <1>;
 	sven_low_active;
-	status = "okay";
+	status = "disabled";
 };
 
 &tsc {
@@ -380,7 +396,15 @@
 
 &uart6 {
 	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_uart6>;
+	pinctrl-0 = <&pinctrl_uart6 &pinctrl_485_ctl>;
+	//pinctrl-0 = <&pinctrl_uart3>;
+	//fsl,rs485-gpio-txen = <&gpio5 0 GPIO_ACTIVE_HIGH>;
+	rts-gpio = <&gpio1 11 GPIO_ACTIVE_HIGH>;
+	rs485-rts-active-high;
+	//rs485-rts-active-high;
+	rs485-rx-during-tx;
+	rs485-rts-delay = <100 100>;
+	linux,rs485-enabled-at-boot-time;
 	status = "okay";
 };
 
@@ -809,6 +833,18 @@
 	pinctrl_wdog: wdoggrp {
 		fsl,pins = <
 			MX6UL_PAD_LCD_RESET__WDOG1_WDOG_ANY    0x30b0
+		>;
+	};
+
+	pinctrl_leds: ledgrp {
+		fsl,pins = <
+			MX6ULL_PAD_SNVS_TAMPER0__GPIO5_IO00        0x000110A0
+		>;
+	};
+
+	pinctrl_485_ctl: uart6_rs485 {
+		fsl,pins = <
+			MX6UL_PAD_JTAG_TMS__GPIO1_IO11     0x000070A0
 		>;
 	};
 };
