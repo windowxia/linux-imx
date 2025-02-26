@@ -230,8 +230,6 @@
 		output-high;
 		line-name = "eth1-phy";
 	};
-
-	status = "disabled";
 };
 
 &i2c1 {
