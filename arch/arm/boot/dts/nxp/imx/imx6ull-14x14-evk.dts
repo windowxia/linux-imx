@@ -52,7 +52,7 @@
 		regulator-name = "VSD_3V3";
 		regulator-min-microvolt = <3300000>;
 		regulator-max-microvolt = <3300000>;
-		gpio = <&gpio1 9 GPIO_ACTIVE_HIGH>;
+		gpio = <&gpio3 21 GPIO_ACTIVE_HIGH>;
 		off-on-delay-us = <20000>;
 		enable-active-high;
 	};
@@ -87,17 +87,29 @@
 		gpios = <&gpio_spi 3 GPIO_ACTIVE_LOW>;
 	};
 
-	leds {
-		compatible = "gpio-leds";
-		pinctrl-names = "default";
-		pinctrl-0 = <&pinctrl_leds>;
+	reg_gnss_3v3: regulator-gnss-3v3 {
+		compatible = "regulator-fixed";
+		regulator-name = "gnss-3v3";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		gpios = <&gpio5 1 GPIO_ACTIVE_LOW>;
+	};
 
-		led0: cpu {
-			label = "cpu";
-			gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-			default-state = "on";
-			linux,default-trigger = "heartbeat";
-		};
+	reg_extpwr_12v: regulator-extpwr_12v {
+		compatible = "regulator-fixed";
+		regulator-name = "extpwr_12v";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		gpios = <&gpio5 0 GPIO_ACTIVE_LOW>;
+	};
+
+	ltc2952 {
+		compatible = "lltc,ltc2952";
+
+		trigger-gpios = <&gpio5 5 GPIO_ACTIVE_LOW>;
+		trigger-delay-ms = <2000>;
+		watchdog-gpios = <&gpio5 8 GPIO_ACTIVE_HIGH>;
+		kill-gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
 	};
 
 	sound-wm8960 {
@@ -834,12 +846,6 @@
 		>;
 	};
 
-	pinctrl_leds: ledgrp {
-		fsl,pins = <
-			MX6ULL_PAD_SNVS_TAMPER0__GPIO5_IO00        0x000110A0
-		>;
-	};
-
 	pinctrl_485_ctl: uart6_rs485 {
 		fsl,pins = <
 			MX6UL_PAD_JTAG_TMS__GPIO1_IO11     0x000070A0
@@ -847,6 +853,24 @@
 	};
 };
 
-
+&iomuxc_snvs {
+	pinctrl-names = "default_snvs";
+    imx6ull-board {
+    pinctrl-0 = <&BOARD_InitPinsSnvs>;
+        BOARD_InitPinsSnvs: BOARD_InitPinsSnvsGrp {        /*!< Function assigned for the core: Cortex-A7[ca7] */
+            fsl,pins = <
+                MX6ULL_PAD_SNVS_TAMPER0__GPIO5_IO00        0x000110A0
+                MX6ULL_PAD_SNVS_TAMPER1__GPIO5_IO01        0x000110A0
+                MX6ULL_PAD_SNVS_TAMPER3__GPIO5_IO03        0x000110A0
+                MX6ULL_PAD_SNVS_TAMPER4__GPIO5_IO04        0x000110A0
+                MX6ULL_PAD_SNVS_TAMPER5__GPIO5_IO05        0x000110A0
+                MX6ULL_PAD_SNVS_TAMPER6__GPIO5_IO06        0x000110A0
+                MX6ULL_PAD_SNVS_TAMPER7__GPIO5_IO07        0x000110A0
+                MX6ULL_PAD_SNVS_TAMPER8__GPIO5_IO08        0x000110A0
+                MX6ULL_PAD_SNVS_TAMPER9__GPIO5_IO09        0x000110A0
+            >;
+        };
+    };
+};
 
 /delete-node/ &sim2;
