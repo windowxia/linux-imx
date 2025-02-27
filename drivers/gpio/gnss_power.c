@@ -3,6 +3,7 @@
 #include <linux/platform_device.h>
 #include <linux/gpio/consumer.h>
 #include <linux/regulator/driver.h>
+#include <linux/of_device.h>
 
 struct gnss_regulator {
     struct regulator_dev *rdev;
@@ -76,8 +77,8 @@ static int gnss_regulator_probe(struct platform_device *pdev)
 }
 
 static const struct of_device_id gnss_regulator_of_match[] = {
-    { .compatible = "regulator-fixed", },
-    { /* sentinel */ },
+    { .compatible = "regulator-fixed" },
+    {  }
 };
 MODULE_DEVICE_TABLE(of, gnss_regulator_of_match);
 
