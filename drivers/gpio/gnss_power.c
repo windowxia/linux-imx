@@ -2,6 +2,7 @@
 #include <linux/gpio/consumer.h>
 #include <linux/fs.h>
 #include <linux/uaccess.h>
+#include <linux/device.h>     // 新增
 
 #define DEVICE_NAME "gnss_power"
 
