@@ -47,15 +47,15 @@
 		status = "okay";
 	};
 
-	reg_sd1_vmmc: regulator-sd1-vmmc {
-		compatible = "regulator-fixed";
-		regulator-name = "VSD_3V3";
-		regulator-min-microvolt = <3300000>;
-		regulator-max-microvolt = <3300000>;
-		gpio = <&gpio3 21 GPIO_ACTIVE_HIGH>;
-		off-on-delay-us = <20000>;
-		enable-active-high;
-	};
+	// reg_sd1_vmmc: regulator-sd1-vmmc {
+	// 	compatible = "regulator-fixed";
+	// 	regulator-name = "VSD_3V3";
+	// 	regulator-min-microvolt = <3300000>;
+	// 	regulator-max-microvolt = <3300000>;
+	// 	gpio = <&gpio3 21 GPIO_ACTIVE_HIGH>;
+	// 	off-on-delay-us = <20000>;
+	// 	enable-active-high;
+	// };
 
 	reg_peri_3v3: regulator-peri-3v3 {
 		compatible = "regulator-fixed";
@@ -79,29 +79,29 @@
 		regulator-always-on;
 	};
 
-	reg_can_3v3: regulator-can-3v3 {
-		compatible = "regulator-fixed";
-		regulator-name = "can-3v3";
-		regulator-min-microvolt = <3300000>;
-		regulator-max-microvolt = <3300000>;
-		gpios = <&gpio_spi 3 GPIO_ACTIVE_LOW>;
-	};
+	// reg_can_3v3: regulator-can-3v3 {
+	// 	compatible = "regulator-fixed";
+	// 	regulator-name = "can-3v3";
+	// 	regulator-min-microvolt = <3300000>;
+	// 	regulator-max-microvolt = <3300000>;
+	// 	gpios = <&gpio_spi 3 GPIO_ACTIVE_LOW>;
+	// };
 
-	reg_gnss_3v3: regulator-gnss-3v3 {
-		compatible = "regulator-fixed";
-		regulator-name = "gnss-3v3";
-		regulator-min-microvolt = <3300000>;
-		regulator-max-microvolt = <3300000>;
-		gpios = <&gpio5 1 GPIO_ACTIVE_LOW>;
-	};
+	// reg_gnss_3v3: regulator-gnss-3v3 {
+	// 	compatible = "regulator-fixed";
+	// 	regulator-name = "gnss-3v3";
+	// 	regulator-min-microvolt = <3300000>;
+	// 	regulator-max-microvolt = <3300000>;
+	// 	gpios = <&gpio5 1 GPIO_ACTIVE_LOW>;
+	// };
 
-	reg_extpwr_12v: regulator-extpwr_12v {
-		compatible = "regulator-fixed";
-		regulator-name = "extpwr_12v";
-		regulator-min-microvolt = <3300000>;
-		regulator-max-microvolt = <3300000>;
-		gpios = <&gpio5 0 GPIO_ACTIVE_LOW>;
-	};
+	// reg_extpwr_12v: regulator-extpwr_12v {
+	// 	compatible = "regulator-fixed";
+	// 	regulator-name = "extpwr_12v";
+	// 	regulator-min-microvolt = <3300000>;
+	// 	regulator-max-microvolt = <3300000>;
+	// 	gpios = <&gpio5 0 GPIO_ACTIVE_LOW>;
+	// };
 
 	ltc2952 {
 		compatible = "lltc,ltc2952";
@@ -215,19 +215,19 @@
 	};
 };
 
-&can1 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_flexcan1>;
-	xceiver-supply = <&reg_can_3v3>;
-	status = "disabled";
-};
+// &can1 {
+// 	pinctrl-names = "default";
+// 	pinctrl-0 = <&pinctrl_flexcan1>;
+// 	xceiver-supply = <&reg_can_3v3>;
+// 	status = "disabled";
+// };
 
-&can2 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_flexcan2>;
-	xceiver-supply = <&reg_can_3v3>;
-	status = "disabled";
-};
+// &can2 {
+// 	pinctrl-names = "default";
+// 	pinctrl-0 = <&pinctrl_flexcan2>;
+// 	xceiver-supply = <&reg_can_3v3>;
+// 	status = "disabled";
+// };
 
 &gpio_spi {
 	eth0-phy-hog {
@@ -504,7 +504,7 @@
 	cd-gpios = <&gpio1 19 GPIO_ACTIVE_LOW>;
 	keep-power-in-suspend;
 	wakeup-source;
-	vmmc-supply = <&reg_sd1_vmmc>;
+	// vmmc-supply = <&reg_sd1_vmmc>;
 	status = "okay";
 };
 
