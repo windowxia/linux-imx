@@ -1,59 +1,96 @@
+#include <linux/init.h>
 #include <linux/module.h>
+#include <linux/platform_device.h>
 #include <linux/gpio/consumer.h>
-#include <linux/fs.h>
-#include <linux/uaccess.h>
-#include <linux/device.h>     // 新增
+#include <linux/regulator/driver.h>
 
-#define DEVICE_NAME "gnss_power"
-
-static struct gpio_desc *gnss_gpio;
-
-static int dev_open(struct inode *inode, struct file *file) {
-    return nonseekable_open(inode, file);
-}
-
-static ssize_t dev_write(struct file *file, const char __user *buf,
-                         size_t count, loff_t *ppos) {
-    char kbuf[2];
-    if (copy_from_user(kbuf, buf, count)) return -EFAULT;
-    
-    int value = kbuf[0] - '0';
-    gpiod_set_value(gnss_gpio, value); // 注意：低电平有效
-    return count;
-}
-
-static const struct file_operations fops = {
-    .open = dev_open,
-    .write = dev_write,
+struct gnss_regulator {
+    struct regulator_dev *rdev;
+    struct gpio_desc *gpiod;
 };
 
-static int __init gnss_power_init(void) {
-    // 获取GPIO描述符
-    gnss_gpio = gpiod_get_from_of_node(NULL, "regulator-gnss-3v3", "en");
-    if (IS_ERR(gnss_gpio)) {
-        pr_err("Failed to get GPIO\n");
-        return PTR_ERR(gnss_gpio);
-    }
+static int gnss_regulator_enable(struct regulator_dev *rdev)
+{
+    struct gnss_regulator *data = rdev_get_drvdata(rdev);
     
-    // 创建设备节点
-    if (!class_create(THIS_MODULE, DEVICE_NAME))
-        device_create(class_create(THIS_MODULE, DEVICE_NAME), NULL,
-                      MKDEV(0, 0), NULL);
-    else
-        pr_err("Failed to create class\n");
-    
+    gpiod_set_value_cansleep(data->gpiod, 1);
     return 0;
 }
 
-static void __exit gnss_power_exit(void) {
-    device_destroy(class_create(THIS_MODULE, DEVICE_NAME), MKDEV(0, 0));
-    class_destroy(THIS_MODULE, DEVICE_NAME);
-    gpiod_put(gnss_gpio);
+static int gnss_regulator_disable(struct regulator_dev *rdev)
+{
+    struct gnss_regulator *data = rdev_get_drvdata(rdev);
+    
+    gpiod_set_value_cansleep(data->gpiod, 0);
+    return 0;
 }
 
-module_init(gnss_power_init);
-module_exit(gnss_power_exit);
+static int gnss_regulator_is_enabled(struct regulator_dev *rdev)
+{
+    struct gnss_regulator *data = rdev_get_drvdata(rdev);
+    
+    return gpiod_get_value_cansleep(data->gpiod);
+}
+
+static const struct regulator_ops gnss_regulator_ops = {
+    .enable = gnss_regulator_enable,
+    .disable = gnss_regulator_disable,
+    .is_enabled = gnss_regulator_is_enabled,
+};
+
+static const struct regulator_desc gnss_desc = {
+    .name = "gnss-3v3",
+    .id = -1,
+    .ops = &gnss_regulator_ops,
+    .type = REGULATOR_VOLTAGE,
+    .owner = THIS_MODULE,
+};
+
+static int gnss_regulator_probe(struct platform_device *pdev)
+{
+    struct regulator_config config = {0};
+    struct gnss_regulator *data;
+    int ret;
+
+    data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+    if (!data)
+        return -ENOMEM;
+
+    data->gpiod = devm_gpiod_get(&pdev->dev, NULL, GPIOD_OUT_HIGH);
+    if (IS_ERR(data->gpiod)) {
+        dev_err(&pdev->dev, "Failed to get GPIO\n");
+        return PTR_ERR(data->gpiod);
+    }
+
+    config.dev = &pdev->dev;
+    config.driver_data = data;
+    config.of_node = pdev->dev.of_node;
+
+    data->rdev = devm_regulator_register(&pdev->dev, &gnss_desc, &config);
+    if (IS_ERR(data->rdev)) {
+        dev_err(&pdev->dev, "Failed to register regulator\n");
+        return PTR_ERR(data->rdev);
+    }
+
+    return 0;
+}
+
+static const struct of_device_id gnss_regulator_of_match[] = {
+    { .compatible = "regulator-fixed", },
+    { /* sentinel */ },
+};
+MODULE_DEVICE_TABLE(of, gnss_regulator_of_match);
+
+static struct platform_driver gnss_regulator_driver = {
+    .probe = gnss_regulator_probe,
+    .driver = {
+        .name = "gnss-regulator",
+        .of_match_table = gnss_regulator_of_match,
+    },
+};
+
+module_platform_driver(gnss_regulator_driver);
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Your Name");
-MODULE_DESCRIPTION("GNSS Power Control Driver");
+MODULE_DESCRIPTION("Custom GNSS 3.3V Regulator Driver");
