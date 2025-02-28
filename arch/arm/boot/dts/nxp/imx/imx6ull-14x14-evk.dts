@@ -47,15 +47,15 @@
 		status = "okay";
 	};
 
-	// reg_sd1_vmmc: regulator-sd1-vmmc {
-	// 	compatible = "regulator-fixed";
-	// 	regulator-name = "VSD_3V3";
-	// 	regulator-min-microvolt = <3300000>;
-	// 	regulator-max-microvolt = <3300000>;
-	// 	gpio = <&gpio3 21 GPIO_ACTIVE_HIGH>;
-	// 	off-on-delay-us = <20000>;
-	// 	enable-active-high;
-	// };
+	reg_sd1_vmmc: regulator-sd1-vmmc {
+		compatible = "regulator-fixed";
+		regulator-name = "VSD_3V3";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		gpio = <&gpio3 21 GPIO_ACTIVE_HIGH>;
+		off-on-delay-us = <20000>;
+		enable-active-high;
+	};
 
 	reg_peri_3v3: regulator-peri-3v3 {
 		compatible = "regulator-fixed";
