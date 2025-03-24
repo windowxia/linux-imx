@@ -971,6 +971,7 @@ struct phy_device *get_phy_device(struct mii_bus *bus, int addr, bool is_c45)
 			return phy_device_create(bus, addr, phy_id,
 						 true, &c45_ids);
 	}
+	printk(KERN_DEBUG "PHY ID %08x\n", phy_id);
 
 	return phy_device_create(bus, addr, phy_id, is_c45, &c45_ids);
 }

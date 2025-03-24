@@ -889,8 +889,10 @@ static int fec_enet_uio_mdio_read_c22(struct mii_bus *bus, int mii_id, int regnu
 		netdev_err(fep->netdev, "MDIO read timeout\n");
 		goto out;
 	}
+	printk("ret:%d\r\n", ret);
 
 	ret = FEC_MMFR_DATA(readl(fep->hwp + FEC_MII_DATA));
+	printk("ret:%d\r\n", ret);
 
 out:
 	pm_runtime_mark_last_busy(dev);
@@ -938,8 +940,10 @@ static int fec_enet_uio_mdio_read_c45(struct mii_bus *bus, int mii_id,
 		netdev_err(fep->netdev, "MDIO read timeout\n");
 		goto out;
 	}
+	printk("ret:%d\r\n", ret);
 
 	ret = FEC_MMFR_DATA(readl(fep->hwp + FEC_MII_DATA));
+	printk("ret:%d\r\n", ret);
 
 out:
 	pm_runtime_mark_last_busy(dev);
