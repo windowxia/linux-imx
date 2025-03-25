@@ -103,15 +103,15 @@
 	// 	gpios = <&gpio5 0 GPIO_ACTIVE_LOW>;
 	// };
 
-	ltc2952 {
-		compatible = "lltc,ltc2952";
-		pinctrl-names = "default";
-		pinctrl-0 = <&pinctrl_ltc2952>;
-		trigger-gpios = <&gpio5 5 GPIO_ACTIVE_LOW>;
-		trigger-delay-ms = <2000>;
-		watchdog-gpios = <&gpio5 8 GPIO_ACTIVE_HIGH>;
-		kill-gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
-	};
+	// ltc2952 {
+	// 	compatible = "lltc,ltc2952";
+	// 	pinctrl-names = "default";
+	// 	pinctrl-0 = <&pinctrl_ltc2952>;
+	// 	trigger-gpios = <&gpio5 5 GPIO_ACTIVE_LOW>;
+	// 	trigger-delay-ms = <2000>;
+	// 	watchdog-gpios = <&gpio5 8 GPIO_ACTIVE_HIGH>;
+	// 	kill-gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
+	// };
 
 	sound-wm8960 {
 		compatible = "fsl,imx-audio-wm8960";
@@ -229,20 +229,20 @@
 // 	status = "disabled";
 // };
 
-&gpio_spi {
-	eth0-phy-hog {
-		gpio-hog;
-		gpios = <1 GPIO_ACTIVE_HIGH>;
-		output-high;
-		line-name = "eth0-phy";
-	};
+// &gpio_spi {
+// 	eth0-phy-hog {
+// 		gpio-hog;
+// 		gpios = <1 GPIO_ACTIVE_HIGH>;
+// 		output-high;
+// 		line-name = "eth0-phy";
+// 	};
 
-	eth1-phy-hog {
-		gpio-hog;
-		gpios = <2 GPIO_ACTIVE_HIGH>;
-		output-high;
-		line-name = "eth1-phy";
-	};
+// 	eth1-phy-hog {
+// 		gpio-hog;
+// 		gpios = <2 GPIO_ACTIVE_HIGH>;
+// 		output-high;
+// 		line-name = "eth1-phy";
+// 	};
 };
 
 &i2c1 {
@@ -532,7 +532,7 @@
 			MX6UL_PAD_CSI_DATA01__CSI_DATA03	0x1b088
 			MX6UL_PAD_CSI_DATA02__CSI_DATA04	0x1b088
 			MX6UL_PAD_CSI_DATA03__CSI_DATA05	0x1b088
-			MX6UL_PAD_CSI_DATA04__CSI_DATA06	0x1b088
+			// MX6UL_PAD_CSI_DATA04__CSI_DATA06	0x1b088
 			MX6UL_PAD_CSI_DATA05__CSI_DATA07	0x1b088
 			MX6UL_PAD_CSI_DATA06__CSI_DATA08	0x1b088
 			MX6UL_PAD_CSI_DATA07__CSI_DATA09	0x1b088
@@ -674,7 +674,7 @@
 	pinctrl_sim2: sim2grp {
 		fsl,pins = <
 			MX6UL_PAD_CSI_DATA03__SIM2_PORT1_PD		0xb808
-			MX6UL_PAD_CSI_DATA04__SIM2_PORT1_CLK		0x31
+			// MX6UL_PAD_CSI_DATA04__SIM2_PORT1_CLK		0x31
 			MX6UL_PAD_CSI_DATA05__SIM2_PORT1_RST_B		0xb808
 			MX6UL_PAD_CSI_DATA06__SIM2_PORT1_SVEN		0xb808
 			MX6UL_PAD_CSI_DATA07__SIM2_PORT1_TRXD		0xb809
@@ -850,13 +850,13 @@
 		>;
 	};
 
-	pinctrl_ltc2952: ltc2952 {
-		fsl,pin = <
-		MX6ULL_PAD_SNVS_TAMPER5__GPIO5_IO05        0x70a1
-		MX6ULL_PAD_SNVS_TAMPER8__GPIO5_IO08        0x70a1
-		MX6UL_PAD_JTAG_TDI__GPIO1_IO13			   0x70a1
-		>;
-	};
+	// pinctrl_ltc2952: ltc2952 {
+	// 	fsl,pin = <
+	// 	MX6ULL_PAD_SNVS_TAMPER5__GPIO5_IO05        0x70a1
+	// 	MX6ULL_PAD_SNVS_TAMPER8__GPIO5_IO08        0x70a1
+	// 	MX6UL_PAD_JTAG_TDI__GPIO1_IO13			   0x70a1
+	// 	>;
+	// };
 };
 
 &iomuxc_snvs {
